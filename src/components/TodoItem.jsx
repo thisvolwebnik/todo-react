@@ -1,14 +1,16 @@
-export const TodoItem = () => {
+export const TodoItem = (props) => {
+  const { className, id, title, isDone } = props;
+
   return (
-    <li className="todo__item todo-item">
+    <li className={`todo-item ${className}`}>
       <input
         className="todo-item__checkbox"
-        id="task-1"
+        id={id}
         type="checkbox"
-        checked
+        checked={isDone}
       />
-      <label className="todo-item__label" htmlFor="task-1">
-        Task 1
+      <label className="todo-item__label" htmlFor={id}>
+        {title}
       </label>
       <button
         className="todo-item__delete-button"
@@ -33,4 +35,4 @@ export const TodoItem = () => {
       </button>
     </li>
   );
-}
+};

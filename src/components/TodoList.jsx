@@ -1,7 +1,7 @@
 import { TodoItem } from "./TodoItem";
 
 export const TodoList = (props) => {
-  const { tasks = [] } = props;
+  const { tasks = [], deleteTask, toggleTaskComplete } = props;
 
   const hasTask = true;
 
@@ -12,7 +12,13 @@ export const TodoList = (props) => {
   return (
     <ul className="todo__list">
       {tasks.map((task) => (
-        <TodoItem className="todo__item" {...task} key={task.id} />
+        <TodoItem
+          className="todo__item"
+          {...task}
+          key={task.id}
+          onClickDeleteTask={deleteTask}
+          toggleTaskComplete={toggleTaskComplete}
+        />
       ))}
     </ul>
   );

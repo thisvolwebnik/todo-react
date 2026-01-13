@@ -1,5 +1,12 @@
 export const TodoItem = (props) => {
-  const { className, id, title, isDone } = props;
+  const {
+    className,
+    id,
+    title,
+    isDone,
+    onClickDeleteTask,
+    toggleTaskComplete,
+  } = props;
 
   return (
     <li className={`todo-item ${className}`}>
@@ -8,6 +15,7 @@ export const TodoItem = (props) => {
         id={id}
         type="checkbox"
         checked={isDone}
+        onChange={(event) => toggleTaskComplete(id, event.target.checked)}
       />
       <label className="todo-item__label" htmlFor={id}>
         {title}
@@ -16,6 +24,7 @@ export const TodoItem = (props) => {
         className="todo-item__delete-button"
         aria-label="Delete"
         title="Delete"
+        onClick={() => onClickDeleteTask(id)}
       >
         <svg
           width="20"

@@ -2,15 +2,24 @@ import { AddTaskForm } from "./AddTaskForm";
 import { SearchTaskForm } from "./SearchTaskForm";
 import { TodoInfo } from "./TodoInfo";
 import { TodoList } from "./TodoList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Todo = () => {
-  const [tasks, setTasks] = useState([
-    { id: "task-1", title: "Купить молоко", isDone: true },
-    { id: "task-2", title: "Купить хлеб", isDone: false },
-  ]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    if (savedTasks) {
+      return JSON.parse(savedTasks);
+    }
+
+    return [
+      { id: "task-1", title: "Купить молоко", isDone: true },
+      { id: "task-2", title: "Купить хлеб", isDone: false },
+    ];
+  });
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const addTask = () => {
     if (newTaskTitle.trim().length > 0) {
@@ -22,6 +31,7 @@ export const Todo = () => {
 
       setTasks([...tasks, newTask]);
       setNewTaskTitle("");
+      setSearchQuery("");
     }
   };
 
@@ -49,6 +59,19 @@ export const Todo = () => {
     );
   };
 
+  useEffect(() => {
+    console.log("Save local storage!");
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const clearSearchQuery = searchQuery.trim().toLowerCase();
+  const filteredTasks =
+    clearSearchQuery.length > 0
+      ? tasks.filter(({ title }) =>
+          title.toLowerCase().includes(clearSearchQuery),
+        )
+      : null;
+
   return (
     <div className="todo">
       <h1 className="todo__title">To Do List</h1>
@@ -57,7 +80,10 @@ export const Todo = () => {
         newTaskTitle={newTaskTitle}
         setNewTaskTitle={setNewTaskTitle}
       />
-      <SearchTaskForm />
+      <SearchTaskForm
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <TodoInfo
         total={tasks.length}
         done={tasks.filter(({ isDone }) => isDone).length}
@@ -65,6 +91,7 @@ export const Todo = () => {
       />
       <TodoList
         tasks={tasks}
+        filteredTasks={filteredTasks}
         deleteTask={deleteTask}
         toggleTaskComplete={toggleTaskComplete}
       />

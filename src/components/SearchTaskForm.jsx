@@ -1,6 +1,8 @@
 import { Field } from "./Field";
 
-export const SearchTaskForm = () => {
+export const SearchTaskForm = (props) => {
+  const { searchQuery, setSearchQuery } = props;
+
   return (
     <form className="todo__form">
       <Field
@@ -8,6 +10,8 @@ export const SearchTaskForm = () => {
         label="Search task"
         id="search-task"
         type="search"
+        value={searchQuery}
+        onInput={(event) => setSearchQuery(event.target.value)}
       />
     </form>
   );
